@@ -1,1 +1,1 @@
-# video-workshop
+# movie-magic
