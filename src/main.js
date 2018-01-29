@@ -5,16 +5,24 @@ const playlist = [
   'videos/city-lights.mp4'
 ]
 
-let position = 0;
-
 /*
   wait for the window to finish loading beore doing anything
 */
 window.onload = () => {
+  let position = 0;
+
   const video = document.getElementById('video')
 
   video.addEventListener('ended', () => {
-    console.log('video is done')
+    position++;
+
+    if (position >= playlist.length) {
+      position = 0
+    }
+
+    video.src = playlist[position];
+    video.load();
+    video.play();
   })
 
   video.src = playlist[position];
