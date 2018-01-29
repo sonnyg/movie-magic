@@ -20,12 +20,14 @@ window.onload = () => {
       position = 0
     }
 
-    video.src = playlist[position];
-    video.load();
-    video.play();
+    loadAndPlayMovie(video, playlist[position])
   })
 
-  video.src = playlist[position];
+  loadAndPlayMovie(video, playlist[position])
+}
+
+function loadAndPlayMovie(video, movie) {
+  video.src = movie;
   video.load();
   video.play();
 }
