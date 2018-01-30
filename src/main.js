@@ -5,23 +5,28 @@ const playlist = [
   'videos/city-lights.mp4'
 ]
 
+var position = 0
+var video = null
+
 /*
   wait for the window to finish loading beore doing anything
 */
-window.onload = () => {
-  let position = 0;
+window.addEventListener('load', handleWindowLoad, false)
 
-  const video = document.getElementById('video')
+function handleWindowLoad() {
+  video = document.getElementById('video')
 
-  video.addEventListener('ended', () => {
-    position++;
+  video.addEventListener('ended', handleVideoEnded, false)
 
-    if (position >= playlist.length) {
-      position = 0
-    }
+  loadAndPlayMovie(video, playlist[position])
+}
 
-    loadAndPlayMovie(video, playlist[position])
-  })
+function handleVideoEnded() {
+  position++;
+
+  if (position >= playlist.length) {
+    position = 0
+  }
 
   loadAndPlayMovie(video, playlist[position])
 }
