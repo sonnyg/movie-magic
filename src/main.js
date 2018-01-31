@@ -14,11 +14,21 @@ var video = null
 window.addEventListener('load', handleWindowLoad, false)
 
 function handleWindowLoad() {
+  const effects = document.getElementsByName('effect')
+
+  for (var i = 0; i < effects.length; i++) {
+    effects[i].addEventListener('change', handleEffectChange, false)
+  }
+
   video = document.getElementById('video')
 
   video.addEventListener('ended', handleVideoEnded, false)
 
   loadAndPlayMovie(video, playlist[position])
+}
+
+function handleEffectChange(event) {
+    console.log(`effect selected: ${event.currentTarget.value}`)
 }
 
 function handleVideoEnded() {

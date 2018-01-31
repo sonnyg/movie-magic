@@ -2,3 +2,8 @@ body {
   background-color: #ddd;
   color: #55f;
 }
+
+li {
+  display: inline;
+  list-style: none;
+}
