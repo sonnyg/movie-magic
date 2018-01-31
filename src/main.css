@@ -7,3 +7,13 @@ li {
   display: inline;
   list-style: none;
 }
+
+div#movieScreen {
+  position: relative;
+}
+
+div#movieScreen canvas {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}

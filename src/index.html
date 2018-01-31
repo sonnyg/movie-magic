@@ -7,9 +7,14 @@
   <script src="main.js"></script>
 </head>
 <body>
-  <video id="video" controls width="640" height="360" poster="images/movie-magic.png">
-    Uh-oh! Looks like your browser doesn't support mp4s...
-  </video>
+  <div id="movieScreen">
+    <video id="video" controls width="640" height="360" poster="images/movie-magic.png">
+      Uh-oh! Looks like your browser doesn't support mp4s...
+    </video>
+
+    <canvas id="buffer" width="640" height="360"></canvas>
+    <canvas id="display" width="640" height="360"></canvas>
+  </div>
 
   <ul>
     <li><input type="radio" name="effect" value="normal" checked>normal</li>
