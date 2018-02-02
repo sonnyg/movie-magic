@@ -84,16 +84,35 @@ function processVideo() {
   setTimeout(processVideo, 0)
 }
 
+// sepia effect
 function westernEffect(pixel) {
-  return pixel //{r: pixel.r, g: pixel.g, b: pixel.b, a: pixel.a}
+  // take all the 'color' out, but keep the general brightness
+  const grayTone = (3*pixel.r + 4*pixel.g + pixel.b) >>> 3
+  return {
+    r: grayTone+40,
+    g: grayTone+20,
+    b: grayTone-20,
+    a: pixel.a}
 }
 
+// black-and-white effect
 function noirEffect(pixel) {
-  return pixel //{r: pixel.r, g: pixel.g, b: pixel.b, a: pixel.a}
+  // take all the 'color' out, but keep the general brightness
+  const grayTone = (3*pixel.r + 4*pixel.g + pixel.b) >>> 3
+  return {
+    r: grayTone,
+    g: grayTone,
+    b: grayTone,
+    a: pixel.a}
 }
 
+// 'reverse' effect
 function scifiEffect(pixel) {
-  return {r: 0, g: pixel.g, b: pixel.b, a: pixel.a}
+  return {
+    r: Math.round(255 - pixel.r), // 0
+    g: Math.round(255 - pixel.g),
+    b: Math.round(255 - pixel.b),
+    a: pixel.a}
 }
 
 function handleVideoEnded() {
