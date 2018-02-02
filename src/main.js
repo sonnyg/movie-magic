@@ -57,7 +57,7 @@ function processVideo() {
 
   // copy video contents into buffer
   buffer.drawImage(video, 0, 0, bufferCanvas.width, bufferCanvas.height)
-  const frame = buffer.getImageData(0, 0, bufferCanvas.width, 180) //bufferCanvas.height)
+  const frame = buffer.getImageData(0, 0, bufferCanvas.width, bufferCanvas.height)
   const effect = effects[selectedEffect]
 
   if (effect != null) {
