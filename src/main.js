@@ -81,7 +81,7 @@ function processVideo() {
 
   // copy frame data to display
   display.putImageData(frame, 0, 0)
-  setTimeout(processVideo, 0)
+  requestAnimationFrame(processVideo)
 }
 
 // sepia effect
