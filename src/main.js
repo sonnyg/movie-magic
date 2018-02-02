@@ -5,6 +5,13 @@ const playlist = [
   'videos/city-lights.mp4'
 ]
 
+const effects = {
+  "western": westernEffect,
+  "noir": noirEffect,
+  "sci-fi": scifiEffect
+}
+
+var selectedEffect = "none"
 var position = 0
 var video = null
 
@@ -29,10 +36,14 @@ function handleWindowLoad() {
 }
 
 function handleEffectChange(event) {
-  console.log(`effect selected: ${event.currentTarget.value}`)
+  selectedEffect = event.target.value
 }
 
 function handleVideoPlay() {
+  processVideo()
+}
+
+function processVideo() {
   const video = document.getElementById('video')
 
   if (video.paused || video.ended) {
@@ -47,17 +58,42 @@ function handleVideoPlay() {
   // copy video contents into buffer
   buffer.drawImage(video, 0, 0, bufferCanvas.width, bufferCanvas.height)
   const frame = buffer.getImageData(0, 0, bufferCanvas.width, 180) //bufferCanvas.height)
-  const pixels = frame.data.length / 4  // rgba
+  const effect = effects[selectedEffect]
 
-  console.log(`processing ${pixels} pixels`)
-  for (var i = 0; i < pixels; i++) {
-    // remove all 'red' data
-    frame.data[i * 4 + 0] = 0
+  if (effect != null) {
+    const pixels = frame.data.length / 4  // rgba
+
+    for (var i = 0; i < pixels; i++) {
+      var pixel = effect({
+        r: frame.data[i * 4 + 0],
+        g: frame.data[i * 4 + 1],
+        b: frame.data[i * 4 + 2],
+        a: frame.data[i * 4 + 3]
+      })
+
+      // update original pixel data, with new pixel data
+      frame.data[i * 4 + 0] = pixel.r
+      frame.data[i * 4 + 1] = pixel.g
+      frame.data[i * 4 + 2] = pixel.b
+      frame.data[i * 4 + 3] = pixel.a
+    }
   }
 
   // copy frame data to display
   display.putImageData(frame, 0, 0)
-  setTimeout(handleVideoPlay, 0)
+  setTimeout(processVideo, 0)
+}
+
+function westernEffect(pixel) {
+  return pixel //{r: pixel.r, g: pixel.g, b: pixel.b, a: pixel.a}
+}
+
+function noirEffect(pixel) {
+  return pixel //{r: pixel.r, g: pixel.g, b: pixel.b, a: pixel.a}
+}
+
+function scifiEffect(pixel) {
+  return {r: 0, g: pixel.g, b: pixel.b, a: pixel.a}
 }
 
 function handleVideoEnded() {
