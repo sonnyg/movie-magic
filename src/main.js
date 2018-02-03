@@ -2,7 +2,8 @@
 const playlist = [
   'videos/blowing-grass.mp4',
   'videos/casual-chickens.mp4',
-  'videos/city-lights.mp4'
+  'videos/city-lights.mp4',
+  'videos/milky-way.mp4'
 ]
 
 const effects = {
