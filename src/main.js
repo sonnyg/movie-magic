@@ -34,15 +34,38 @@ function handleWindowLoad() {
   video.addEventListener('ended', handleVideoEnded, false)
   video.addEventListener('play', handleVideoPlay, false)
 
-  loadAndPlayMovie(video, playlist[position])
+  const playButton = document.getElementById('playButton')
+  playButton.addEventListener('click', handlePlayClick, false)
+
+  const pauseButton = document.getElementById('pauseButton')
+  pauseButton.addEventListener('click', handlePauseClick, false)
 }
 
 function handleEffectChange(event) {
   selectedEffect = event.target.value
+
+  // update the display buffer if the video is paused
+  if (video.paused) {
+    processFrame(video)
+  }
 }
 
 function handleVideoPlay() {
+  if (video.src) {
+    video.play()  // src has already been loaded, just start playing
+  } else {
+    loadAndPlayMovie(video, playlist[position])
+  }
+
   processVideo()
+}
+
+function handlePlayClick() {
+  video.play()
+}
+
+function handlePauseClick() {
+    video.pause()
 }
 
 function processVideo() {
@@ -52,38 +75,42 @@ function processVideo() {
     return
   }
 
-  const bufferCanvas = document.getElementById('buffer')
-  const displayCanvas = document.getElementById('display')
-  const buffer = bufferCanvas.getContext('2d')
-  const display = displayCanvas.getContext('2d')
-
-  // copy video contents into buffer
-  buffer.drawImage(video, 0, 0, bufferCanvas.width, bufferCanvas.height)
-  const frame = buffer.getImageData(0, 0, bufferCanvas.width, bufferCanvas.height)
-  const effect = effects[selectedEffect]
-
-  if (effect != null) {
-    const pixels = frame.data.length / 4  // rgba
-
-    for (var i = 0; i < pixels; i++) {
-      var pixel = effect({
-        r: frame.data[i * 4 + 0],
-        g: frame.data[i * 4 + 1],
-        b: frame.data[i * 4 + 2],
-        a: frame.data[i * 4 + 3]
-      })
-
-      // update original pixel data, with new pixel data
-      frame.data[i * 4 + 0] = pixel.r
-      frame.data[i * 4 + 1] = pixel.g
-      frame.data[i * 4 + 2] = pixel.b
-      frame.data[i * 4 + 3] = pixel.a
-    }
-  }
-
-  // copy frame data to display
-  display.putImageData(frame, 0, 0)
+  processFrame(video)
   requestAnimationFrame(processVideo)
+}
+
+function processFrame(video) {
+    const bufferCanvas = document.getElementById('buffer')
+    const displayCanvas = document.getElementById('display')
+    const buffer = bufferCanvas.getContext('2d')
+    const display = displayCanvas.getContext('2d')
+
+    // copy video contents into buffer
+    buffer.drawImage(video, 0, 0, bufferCanvas.width, bufferCanvas.height)
+    const frame = buffer.getImageData(0, 0, bufferCanvas.width, bufferCanvas.height)
+    const effect = effects[selectedEffect]
+
+    if (effect != null) {
+      const pixels = frame.data.length / 4  // rgba
+
+      for (var i = 0; i < pixels; i++) {
+        var pixel = effect({
+          r: frame.data[i * 4 + 0],
+          g: frame.data[i * 4 + 1],
+          b: frame.data[i * 4 + 2],
+          a: frame.data[i * 4 + 3]
+        })
+
+        // update original pixel data, with new pixel data
+        frame.data[i * 4 + 0] = pixel.r
+        frame.data[i * 4 + 1] = pixel.g
+        frame.data[i * 4 + 2] = pixel.b
+        frame.data[i * 4 + 3] = pixel.a
+      }
+    }
+
+    // copy frame data to display
+    display.putImageData(frame, 0, 0)
 }
 
 // sepia effect
