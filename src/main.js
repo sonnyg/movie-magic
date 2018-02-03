@@ -8,7 +8,8 @@ const playlist = [
 const effects = {
   "western": westernEffect,
   "noir": noirEffect,
-  "sci-fi": scifiEffect
+  "sci-fi": scifiEffect,
+  "underwater": underwaterEffect
 }
 
 var selectedEffect = "none"
@@ -112,6 +113,16 @@ function scifiEffect(pixel) {
     r: Math.round(255 - pixel.r), // 0
     g: Math.round(255 - pixel.g),
     b: Math.round(255 - pixel.b),
+    a: pixel.a}
+}
+
+function underwaterEffect(pixel) {
+  // take all the 'color' out, but keep the general brightness
+  const grayTone = (3*pixel.r + 4*pixel.g + pixel.b) >>> 3
+  return {
+    r: grayTone-20,
+    g: grayTone+20,
+    b: grayTone+40,
     a: pixel.a}
 }
 
